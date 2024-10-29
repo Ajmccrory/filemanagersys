@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseMap Lite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button id="menuToggle" class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1><a href="{{ url_for('cases.index') }}">CaseMap Lite</a></h1>
+        </div>
+        <div class="nav-right">
+            <span class="current-page">{% block title %}{% endblock %}</span>
+        </div>
+    </nav>
+
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <h3>Menu</h3>
+            <button class="close-menu">&times;</button>
+        </div>
+        <ul class="menu-items">
+            <li {% if request.endpoint == 'cases.index' %}class="active"{% endif %}>
+                <a href="{{ url_for('cases.index') }}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li {% if request.endpoint == 'cases.view_case' %}class="active"{% endif %}>
+                <a href="#" id="casesList">
+                    <i class="fas fa-folder"></i> Cases
+                </a>
+                <ul class="submenu" id="casesSubmenu">
+                    {% for case in get_cases() %}
+                    <li>
+                        <a href="{{ url_for('cases.view_case', case_id=case.id) }}">
+                            {{ case.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li>
+                <a href="#" id="createCase">
+                    <i class="fas fa-plus"></i> New Case
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
