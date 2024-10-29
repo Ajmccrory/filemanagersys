@@ -1,10 +1,15 @@
 from setuptools import setup
 
-APP = ['launcher.py']
+APP = ['launcher_mac.py']
 DATA_FILES = [
     ('', ['requirements.txt']),
-    ('app', ['app']),
-    ('docs', ['docs'])
+    ('app', [
+        'app/app.py',
+        # Add other specific app files needed
+    ]),
+    ('docs', [
+        # Add specific doc files needed
+    ])
 ]
 
 OPTIONS = {

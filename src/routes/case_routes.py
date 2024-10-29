@@ -1,13 +1,13 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, send_file
+from flask import Blueprint, render_template, request, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
-from src.models.case import Case
+from src.models.models import Case, Evidence
 from src import db
 
 bp = Blueprint('cases', __name__)
 
-UPLOAD_FOLDER = 'src/static/uploads'
-ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'static', 'uploads')
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt', 'xlsx'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -27,8 +27,7 @@ def new_case():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            if not os.path.exists(UPLOAD_FOLDER):
-                os.makedirs(UPLOAD_FOLDER)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             file_path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(file_path)
             case.file_path = filename
@@ -86,3 +85,4 @@ def download_case_file(case_id):
             download_name=case.file_path
         )
     return redirect(url_for('cases.view_case', case_id=case_id))
+

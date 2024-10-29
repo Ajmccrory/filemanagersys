@@ -1,5 +1,8 @@
 #!/bin/bash
-echo "Installing required packages..."
-pip install -r requirements.txt
-echo "Starting CaseMap Lite..."
-python -m flask run
+
+# Get the directory where the script is located
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Start the application
+cd "$DIR"
+python app.py

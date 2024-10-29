@@ -8,3 +8,5 @@ class Case(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     file_path = db.Column(db.String(500))  # Store path to uploaded file
     evidence = db.relationship('Evidence', backref='case', lazy=True)
+    people = db.relationship('Person', backref='case', lazy=True)
+    organizations = db.relationship('Organization', backref='case', lazy=True)

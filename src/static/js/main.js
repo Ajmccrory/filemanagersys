@@ -56,33 +56,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Menu functionality
+    // Menu functionality - moved outside of modal checks
     const menuToggle = document.getElementById('menuToggle');
     const sideMenu = document.getElementById('sideMenu');
     const closeMenu = document.querySelector('.close-menu');
     const casesList = document.getElementById('casesList');
     const casesSubmenu = document.getElementById('casesSubmenu');
     
-    menuToggle.addEventListener('click', () => {
-        sideMenu.classList.add('active');
-    });
-    
-    closeMenu.addEventListener('click', () => {
-        sideMenu.classList.remove('active');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+    if (menuToggle && sideMenu && closeMenu) {  // Add safety checks
+        menuToggle.addEventListener('click', () => {
+            sideMenu.classList.add('active');
+        });
+        
+        closeMenu.addEventListener('click', () => {
             sideMenu.classList.remove('active');
-        }
-    });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                sideMenu.classList.remove('active');
+            }
+        });
+    }
     
     // Toggle cases submenu
-    casesList.addEventListener('click', (e) => {
-        e.preventDefault();
-        casesSubmenu.classList.toggle('active');
-    });
+    if (casesList && casesSubmenu) {  // Add safety check
+        casesList.addEventListener('click', (e) => {
+            e.preventDefault();
+            casesSubmenu.classList.toggle('active');
+        });
+    }
 
     // Create case modal functionality
     const createCaseLink = document.getElementById('createCase');

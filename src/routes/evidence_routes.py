@@ -1,6 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template
-from src.models.case import Case
-from src.models.evidence import Evidence
+from src.models.models import Case, Evidence
 from src import db
 
 bp = Blueprint('evidence', __name__)

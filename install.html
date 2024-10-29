@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Install CaseMap Lite</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Install CaseMap Lite</h1>
+        <p>Choose your operating system:</p>
+        <button onclick="installWindows()" class="button">Windows</button>
+        <button onclick="installMac()" class="button">macOS</button>
+    </div>
+
+    <script>
+        function installWindows() {
+            // Download and run PowerShell script
+            window.location.href = 'install_casemap.ps1';
+        }
+
+        function installMac() {
+            // Download and run Shell script
+            window.location.href = 'install_casemap.sh';
+        }
+    </script>
+</body>
+</html> 
