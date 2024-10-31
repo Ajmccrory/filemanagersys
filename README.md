@@ -1,7 +1,7 @@
 # File Manager System
 
 ## Overview
-CaseMap Lite is an open-source case management system designed for legal professionals, investigators, and researchers. Currently in Alpha testing, this application provides a streamlined approach to managing cases, evidence, and entity relationships.
+This file manager system is an open-source case management system designed for legal professionals, investigators, and researchers. Currently in Alpha testing, this application provides a streamlined approach to managing cases, evidence, and entity relationships.
 
 **⚠️ Alpha Stage Notice**: This software is in early development. While core features are functional, you may encounter bugs or incomplete features. Not recommended for production use yet.
 
