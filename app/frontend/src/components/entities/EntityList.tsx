@@ -9,8 +9,9 @@ interface EntityListProps {
   caseId: number;
 }
 
-export function EntityList({ caseId }: EntityListProps) {
-  const { data: entities, isLoading, error } = useEntities(caseId);
+
+export function EntityList({ caseId: evidenceId }: EntityListProps) {
+  const { data: entities, isLoading, error } = useEntities(evidenceId);
 
   if (isLoading) {
     return (
@@ -23,7 +24,7 @@ export function EntityList({ caseId }: EntityListProps) {
   if (error) {
     return (
       <Alert variant="destructive">
-        Failed to load entities: {error.message}
+        Failed to load related entities: {error.message}
       </Alert>
     );
   }
@@ -31,15 +32,20 @@ export function EntityList({ caseId }: EntityListProps) {
   if (!entities?.length) {
     return (
       <div className="text-center p-8 text-gray-500">
-        No entities found. Add an entity using the form above.
+        No related entities found.
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4">
       {entities.map((entity) => (
-        <EntityCard key={entity.id} entity={entity} />
+        <EntityCard 
+          key={entity.id} 
+          entity={entity}
+          showRelationControls
+          evidenceId={evidenceId}
+        />
       ))}
     </div>
   );

@@ -1,61 +1,77 @@
 'use client';
 
 import { useState } from 'react';
-import { Evidence } from '@/lib/types';
+import { Entity } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { EditEvidenceForm } from './EditEvidenceForm';
-import { useDeleteEvidence } from '@/lib/hooks/useEvidence';
-import { formatDate } from '@/lib/utils/helpers';
+import { EditEntityForm } from './EditEntityForm';
+import { useDeleteEntity } from '@/lib/hooks/useEntities';
+import { toast } from 'react-hot-toast';
 
-interface EvidenceCardProps {
-  evidence: Evidence;
+interface EntityCardProps {
+  entity: Entity;
+  showRelationControls?: boolean;
+  evidenceId?: number;
+  onEdit?: () => void;
 }
 
-export function EvidenceCard({ evidence }: EvidenceCardProps) {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const deleteEvidence = useDeleteEvidence();
+export function EntityCard({ 
+  entity, 
+ /* showRelationControls,
+  evidenceId,
+  onEdit */
+}: EntityCardProps) {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const deleteEntity = useDeleteEntity();
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this evidence?')) {
-      await deleteEvidence.mutateAsync(evidence.id);
+    if (!confirm('Are you sure you want to delete this entity?')) return;
+
+    try {
+      await deleteEntity.mutateAsync(entity.id);
+      toast.success('Entity deleted successfully');
+    } catch (error) {
+      console.error('Error in EntityCard:', error)
+      toast.error('Failed to delete entity');
     }
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold">{evidence.title}</h3>
-      <p className="mt-2 text-gray-600 dark:text-gray-300">
-        {evidence.description}
-      </p>
-      <div className="mt-4 text-sm text-gray-500">
-        Added: {formatDate(evidence.date_added)}
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      <h3 className="text-lg font-semibold">{entity.name}</h3>
+      
+      <div className="mt-2 text-gray-600 dark:text-gray-300">
+        Type: {entity.type}
+        {entity.type === 'person' && entity.role && (
+          <span className="ml-2">Role: {entity.role}</span>
+        )}
       </div>
 
       <div className="mt-4 flex gap-2">
         <Button
           variant="outline"
-          onClick={() => setIsEditModalOpen(true)}
+          onClick={() => setShowEditModal(true)}
         >
           Edit
         </Button>
+        
         <Button
           variant="destructive"
           onClick={handleDelete}
-          loading={deleteEvidence.isPending}
+          loading={deleteEntity.isPending}
         >
           Delete
         </Button>
       </div>
 
       <Modal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        title="Edit Evidence"
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="Edit Entity"
       >
-        <EditEvidenceForm
-          evidence={evidence}
-          onSuccess={() => setIsEditModalOpen(false)}
+        <EditEntityForm
+          entity={entity}
+          onSuccess={() => setShowEditModal(false)}
         />
       </Modal>
     </div>

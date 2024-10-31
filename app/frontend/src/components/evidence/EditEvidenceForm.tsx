@@ -4,29 +4,28 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useUpdateCase } from '@/lib/hooks/useCases';
+import { useUpdateEvidence } from '@/lib/hooks/useEvidence';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { toast } from 'react-hot-toast';
-import { Case } from '@/lib/types';
+import { Evidence } from '@/lib/types';
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
-  file: z.instanceof(FileList).optional(),
 });
 
 type FormData = z.infer<typeof schema>;
 
-interface EditCaseFormProps {
-  case_: Case;
+interface EditEvidenceFormProps {
+  evidence: Evidence;
   onSuccess?: () => void;
 }
 
-export function EditCaseForm({ case_, onSuccess }: EditCaseFormProps) {
+export function EditEvidenceForm({ evidence, onSuccess }: EditEvidenceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const updateCase = useUpdateCase();
+  const updateEvidence = useUpdateEvidence();
 
   const {
     register,
@@ -35,23 +34,23 @@ export function EditCaseForm({ case_, onSuccess }: EditCaseFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: case_.title,
-      description: case_.description,
+      title: evidence.title,
+      description: evidence.description,
     },
   });
 
   const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
-      await updateCase.mutateAsync({
-        id: case_.id,
+      await updateEvidence.mutateAsync({
+        evidenceId: evidence.id,
         ...data,
       });
-      toast.success('Case updated successfully');
+      toast.success('Evidence updated successfully');
       onSuccess?.();
     } catch (error) {
-      console.error('Failed to update case', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to update case');
+      console.error('Error in EditEvidenceForm:', error)
+      toast.error('Failed to update evidence');
     } finally {
       setIsSubmitting(false);
     }
@@ -62,7 +61,7 @@ export function EditCaseForm({ case_, onSuccess }: EditCaseFormProps) {
       <div>
         <Input
           {...register('title')}
-          placeholder="Case Title"
+          placeholder="Evidence Title"
           error={errors.title?.message}
         />
       </div>
@@ -70,16 +69,8 @@ export function EditCaseForm({ case_, onSuccess }: EditCaseFormProps) {
       <div>
         <Textarea
           {...register('description')}
-          placeholder="Case Description (optional)"
+          placeholder="Evidence Description (optional)"
           rows={3}
-        />
-      </div>
-
-      <div>
-        <Input
-          type="file"
-          {...register('file')}
-          accept=".pdf,.doc,.docx,.txt"
         />
       </div>
 

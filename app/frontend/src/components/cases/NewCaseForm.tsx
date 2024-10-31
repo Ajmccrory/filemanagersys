@@ -47,6 +47,7 @@ export function NewCaseForm() {
       toast.success('Case created successfully');
       reset();
     } catch (error) {
+      console.error('Error in NewCaseForm:', error)
       toast.error('Failed to create case');
     } finally {
       setIsSubmitting(false);

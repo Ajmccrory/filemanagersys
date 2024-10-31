@@ -1,30 +1,23 @@
 'use client';
 
+import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/Button';
-import { usePathname } from 'next/navigation';
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const pathname = usePathname();
-
-  const getPageTitle = () => {
-    if (pathname === '/') return 'Dashboard';
-    if (pathname.startsWith('/cases/')) {
-      return 'Case Details';
-    }
-    return 'CaseMap Lite';
-  };
 
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <header className="bg-white dark:bg-gray-800 shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <h1 className="text-xl font-semibold">
-            {getPageTitle()}
-          </h1>
-          
-          <div className="flex items-center space-x-4">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <Link href="/" className="flex items-center">
+              <span className="text-xl font-bold">FileManager</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center">
             <Button
               variant="ghost"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

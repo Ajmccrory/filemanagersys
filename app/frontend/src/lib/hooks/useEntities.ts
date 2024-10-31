@@ -49,14 +49,18 @@ export function useUpdateEntity() {
 }
 
 export function useDeleteEntity() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: entitiesApi.delete,
-    onSuccess: (_, entityId) => {
-      queryClient.invalidateQueries({
-        queryKey: ['entities'],
-      });
-    },
-  });
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationFn: entitiesApi.delete,
+      onSuccess: (_, entityId) => { // Remove unused data parameter
+        queryClient.invalidateQueries({
+          queryKey: ['entities'],
+        });
+        // Also invalidate the specific entity
+        queryClient.invalidateQueries({
+          queryKey: ['entities', entityId],
+        });
+      },
+    });
 }

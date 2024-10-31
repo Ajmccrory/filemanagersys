@@ -9,7 +9,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000, // 1 minute
-      retry: 1,
+      refetchOnWindowFocus: false,
     },
   },
 });
@@ -21,7 +21,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider attribute="class">
         {children}
         <Toaster position="top-right" />
       </ThemeProvider>

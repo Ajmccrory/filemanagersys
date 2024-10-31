@@ -46,6 +46,7 @@ export function NewEvidenceForm({ caseId, onSuccess }: NewEvidenceFormProps) {
       reset();
       onSuccess?.();
     } catch (error) {
+      console.error('Error in NewEvidenceForm:', error)
       toast.error('Failed to add evidence');
     } finally {
       setIsSubmitting(false);

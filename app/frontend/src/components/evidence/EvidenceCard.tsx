@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Evidence } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { EntityList } from './EntityList';
+import { EntityList } from '@/components/entities/EntityList'; // Updated import path
 import { useDeleteEvidence } from '@/lib/hooks/useEvidence';
 import { formatDate } from '@/lib/utils/helpers';
 import { toast } from 'react-hot-toast';
@@ -25,19 +25,18 @@ export function EvidenceCard({ evidence, onEdit }: EvidenceCardProps) {
       await deleteEvidence.mutateAsync(evidence.id);
       toast.success('Evidence deleted successfully');
     } catch (error) {
+      console.error('Error in Evidence Card:', error)
       toast.error('Failed to delete evidence');
     }
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <h3 className="text-lg font-semibold">{evidence.title}</h3>
-      
       <p className="mt-2 text-gray-600 dark:text-gray-300">
         {evidence.description}
       </p>
-      
-      <div className="mt-4 text-sm text-gray-500">
+      <div className="mt-2 text-sm text-gray-500">
         Added: {formatDate(evidence.date_added)}
       </div>
 
@@ -72,7 +71,7 @@ export function EvidenceCard({ evidence, onEdit }: EvidenceCardProps) {
         onClose={() => setShowEntities(false)}
         title="Related Entities"
       >
-        <EntityList evidenceId={evidence.id} />
+        <EntityList caseId={evidence.id} />
       </Modal>
     </div>
   );

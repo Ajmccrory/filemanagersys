@@ -7,18 +7,20 @@ import { useCases } from '@/lib/hooks/useCases';
 import { cn } from '@/lib/utils/helpers';
 
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
-  const pathname = usePathname();
-  const { data: cases } = useCases();
+    const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname(); // Use the pathname
+    const { data: cases } = useCases(); // Use the cases hook
+  
+    const toggleSidebar = () => {
+      setIsOpen(prev => !prev);
+    };
 
-  return (
-    <aside
-      className={cn(
-        "bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700",
-        "w-64 transition-all duration-300",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}
-    >
+    return (
+        <aside className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-200 ease-in-out",
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
+        >
       <div className="p-4">
         <nav className="space-y-2">
           <Link
@@ -47,6 +49,9 @@ export function Sidebar() {
                       : "hover:bg-gray-50 dark:hover:bg-gray-700"
                   )}
                 >
+                  <button onClick={toggleSidebar} className="md:hidden">
+        Toggle Sidebar
+      </button>
                   {case_.title}
                 </Link>
               ))}

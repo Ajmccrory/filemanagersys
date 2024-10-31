@@ -30,8 +30,8 @@ export default function LoginPage() {
         const data = await response.json();
         setError(data.message || 'Login failed');
       }
-    } catch (err) {
-      setError('An error occurred during login');
+    } catch (error) {
+        console.error('Error in (auth)/Login:', error);
     }
   };
 

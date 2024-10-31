@@ -1,31 +1,19 @@
-import axios, { AxiosError } from 'axios';
-import { ApiError, ApiResponse } from '@/lib/types';
+import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
+export const api = axios.create({
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// Add response interceptor for error handling
 api.interceptors.response.use(
-  (response) => {
-    const apiResponse: ApiResponse<any> = {
-      data: response.data,
-      status: 'success',
-    };
-    return apiResponse;
-  },
-  (error: AxiosError) => {
-    const apiError: ApiError = {
-      message: error.response?.data?.message || 'An unexpected error occurred',
-      status: error.response?.status || 500,
-    };
-    throw apiError;
+  (response) => response.data,
+  (error) => {
+    const message = error.response?.data?.error || 'An error occurred';
+    return Promise.reject(new Error(message));
   }
 );
-
-export { api };

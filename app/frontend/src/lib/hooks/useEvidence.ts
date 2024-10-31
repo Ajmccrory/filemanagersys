@@ -21,8 +21,7 @@ export function useCreateEvidence() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ caseId, ...data }: Parameters<typeof evidenceApi.create>[1] & { caseId: number }) =>
-      evidenceApi.create(caseId, data),
+    mutationFn: evidenceApi.create,
     onSuccess: (newEvidence: Evidence) => {
       queryClient.invalidateQueries({
         queryKey: ['evidence', newEvidence.case_id],
@@ -35,11 +34,31 @@ export function useUpdateEvidence() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ evidenceId, ...data }: Parameters<typeof evidenceApi.update>[1] & { evidenceId: number }) =>
-      evidenceApi.update(evidenceId, data),
+    mutationFn: evidenceApi.update,
     onSuccess: (updatedEvidence: Evidence) => {
       queryClient.invalidateQueries({
         queryKey: ['evidence', updatedEvidence.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ['evidence', updatedEvidence.case
+        queryKey: ['evidence', updatedEvidence.case_id],
+      });
+    },
+  });
+}
+
+export function useDeleteEvidence() {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationFn: evidenceApi.delete,
+      onSuccess: (_, evidenceId) => { // Remove unused data parameter
+        queryClient.invalidateQueries({
+          queryKey: ['evidence'],
+        });
+        // Also invalidate the specific evidence
+        queryClient.invalidateQueries({
+          queryKey: ['evidence', evidenceId],
+        });
+      },
+    });
+}

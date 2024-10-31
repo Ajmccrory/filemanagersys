@@ -4,6 +4,7 @@ import { useCases } from '@/lib/hooks/useCases';
 import { CaseCard } from './CaseCard';
 import { Spinner } from '@/components/ui/Spinner';
 import { Alert } from '@/components/ui/Alert';
+import { Case } from '@/lib/types';
 
 export function CaseList() {
   const { data: cases, isLoading, error } = useCases();
@@ -35,7 +36,7 @@ export function CaseList() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {cases.map((case_) => (
-        <CaseCard key={case_.id} case_={case_} />
+        <CaseCard key={case_.id} case_={case_ as Case} />
       ))}
     </div>
   );
