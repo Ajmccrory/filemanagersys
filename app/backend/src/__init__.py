@@ -18,9 +18,9 @@ class CaseMapApp:
 
     def init_db(self):
         """Initialize database connection"""
-        # Initialize models
-        from src.models import init_db
-        init_db(engine)
+        # Import models and initialize
+        from src.models import Base
+        Base.metadata.create_all(bind=engine)
 
     def get_cases(self):
         """Helper function to get all cases for the menu"""
@@ -47,13 +47,9 @@ class CaseMapApp:
                 'get_cases': self.get_cases
             }
 
-        # Register blueprints
-        from src.routes import case_routes, evidence_routes, entities_routes, download_routes, api_routes
-        self.app.register_blueprint(api_routes.bp)
-        self.app.register_blueprint(case_routes.bp)
-        self.app.register_blueprint(evidence_routes.bp)
-        self.app.register_blueprint(entities_routes.bp)
-        self.app.register_blueprint(download_routes.bp)
+        # Register consolidated blueprint
+        from src.routes.routes import bp
+        self.app.register_blueprint(bp)
 
         # Ensure upload directory exists
         uploads_dir = os.path.join(self.app.root_path, 'static', 'uploads')
