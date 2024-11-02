@@ -1,8 +1,11 @@
 import pytest
-import os
+import os, sys
 import tempfile
 from src import create_app, db_session
 from src.models import init_db, Case, Evidence
+
+# Add the parent directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 @pytest.fixture
 def app():

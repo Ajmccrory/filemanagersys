@@ -6,11 +6,18 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'database.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
     
     # Generate a static secret key for the desktop app
     SECRET_KEY = secrets.token_hex(32)
+    
+    # File upload settings
+    ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt', 'xlsx'}
+    
+    # API settings
+    JSON_SORT_KEYS = False
+    JSON_AS_ASCII = False
 
-    # Optional: If you want to persist the key between sessions
     @classmethod
     def load_persistent_key(cls):
         key_file = os.path.join(cls.BASE_DIR, 'instance', 'secret.key')
@@ -26,3 +33,8 @@ class Config:
                 return key
         except (OSError, IOError):
             return secrets.token_hex(32)
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = False
