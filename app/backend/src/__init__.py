@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from src.config import Config
 import os
+from flask_cors import CORS
 
 # Create database engine and session
 engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
@@ -55,6 +56,8 @@ class CaseMapApp:
         uploads_dir = os.path.join(self.app.root_path, 'static', 'uploads')
         if not os.path.exists(uploads_dir):
             os.makedirs(uploads_dir)
+
+        CORS(self.app, resources={r"/api/*": {"origins": "*"}})
 
         return self.app
 
